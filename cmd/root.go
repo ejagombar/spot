@@ -8,6 +8,7 @@ import (
 
 	"github.com/ejagombar/CLSpotify/cmd/album"
 	"github.com/ejagombar/CLSpotify/cmd/artist"
+	"github.com/ejagombar/CLSpotify/cmd/auth"
 	"github.com/ejagombar/CLSpotify/cmd/player"
 	"github.com/ejagombar/CLSpotify/cmd/playlist"
 	"github.com/ejagombar/CLSpotify/cmd/song"
@@ -52,5 +53,6 @@ func init() {
 	rootCmd.AddCommand(artist.ArtistCmd)
 	rootCmd.AddCommand(player.PlayCmd)
 	rootCmd.AddCommand(playlist.PlaylistCmd)
+	rootCmd.AddCommand(auth.AuthCmd)
 
 }
