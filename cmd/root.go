@@ -4,9 +4,14 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/ejagombar/CLSpotify/cmd/player"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/ejagombar/CLSpotify/cmd/album"
+	"github.com/ejagombar/CLSpotify/cmd/artist"
+	"github.com/ejagombar/CLSpotify/cmd/player"
+	"github.com/ejagombar/CLSpotify/cmd/playlist"
+	"github.com/ejagombar/CLSpotify/cmd/song"
+	"github.com/spf13/cobra"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -39,4 +44,13 @@ func init() {
 	// when this action is called directly.
 	rootCmd.AddCommand(player.PlayCmd)
 	rootCmd.AddCommand(player.PauseCmd)
+	rootCmd.AddCommand(player.SkipCmd)
+	rootCmd.AddCommand(player.BackCmd)
+
+	rootCmd.AddCommand(album.AlbumCmd)
+	rootCmd.AddCommand(song.SongCmd)
+	rootCmd.AddCommand(artist.ArtistCmd)
+	rootCmd.AddCommand(player.PlayCmd)
+	rootCmd.AddCommand(playlist.PlaylistCmd)
+
 }
