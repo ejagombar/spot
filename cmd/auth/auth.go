@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"github.com/zmb3/spotify/v2"
 	"github.com/zmb3/spotify/v2/auth"
 	"log"
@@ -38,7 +39,7 @@ func completeAuth(w http.ResponseWriter, r *http.Request) {
 	ch <- client
 }
 
-func startServer() {
+func startServer() error {
 	// first start an HTTP server
 	http.HandleFunc("/callback", completeAuth)
 	go func() {
@@ -57,9 +58,10 @@ func startServer() {
 	// use the client to make calls that require authorization
 	user, err := client.CurrentUser(context.Background())
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	fmt.Println("You are logged in as:", user.ID)
+	return nil
 }
 
 // authCmd represents the auth command
@@ -67,19 +69,12 @@ var AuthCmd = &cobra.Command{
 	Use:   "auth",
 	Short: "Connect your spotify account",
 	Long:  ``,
-	Run: func(cmd *cobra.Command, args []string) {
-		startServer()
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := startServer()
+		return err
 	},
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// authCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// authCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	fmt.Println(viper.GetString("auth.spotify_id"))
 }
