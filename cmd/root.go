@@ -13,6 +13,7 @@ import (
 	"github.com/ejagombar/CLSpotify/cmd/playlist"
 	"github.com/ejagombar/CLSpotify/cmd/song"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -34,15 +35,7 @@ func Execute() {
 	}
 }
 
-func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.CLSpotify.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
+func addSubCommands() {
 	rootCmd.AddCommand(player.PlayCmd)
 	rootCmd.AddCommand(player.PauseCmd)
 	rootCmd.AddCommand(player.SkipCmd)
@@ -54,5 +47,35 @@ func init() {
 	rootCmd.AddCommand(player.PlayCmd)
 	rootCmd.AddCommand(playlist.PlaylistCmd)
 	rootCmd.AddCommand(auth.AuthCmd)
+}
 
+func init() {
+	// cobra.OnInitialize(initConfig)
+	initConfig()
+
+	viper.SetDefault("auth.spotify_id", "")
+	viper.SetDefault("auth.spotify_client", "")
+	viper.WriteConfig()
+
+	addSubCommands()
+
+}
+
+func initConfig() {
+	home, err := os.UserHomeDir()
+	cobra.CheckErr(err)
+
+	viper.SetConfigName(".clspot.json")
+	viper.SetConfigType("json")
+	viper.AddConfigPath(home)
+
+	viper.AutomaticEnv()
+
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			err = viper.WriteConfigAs(home + "/.clspot.json")
+		}
+		cobra.CheckErr(err)
+	}
+	viper.ReadInConfig()
 }
