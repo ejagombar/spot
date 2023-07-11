@@ -4,6 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/ejagombar/CLSpotify/cmd/album"
@@ -14,17 +15,22 @@ import (
 	"github.com/ejagombar/CLSpotify/cmd/song"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/zmb3/spotify/v2"
+	// "github.com/zmb3/spotify/v2"
 )
 
 // rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   "CLSpotify",
-	Short: "A brief description of your application",
-	Long:  `CLSpotify is a CLI tool to control your spotify account and playback`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
-}
+var (
+	rootCmd = &cobra.Command{
+		Use:   "CLSpotify",
+		Short: "A brief description of your application",
+		Long:  `CLSpotify is a CLI tool to control your spotify account and playback`,
+		// Uncomment the following line if your bare application
+		// has an action associated with it:
+		// Run: func(cmd *cobra.Command, args []string) { },
+	}
+	client *spotify.Client
+)
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
@@ -44,21 +50,32 @@ func addSubCommands() {
 	rootCmd.AddCommand(album.AlbumCmd)
 	rootCmd.AddCommand(song.SongCmd)
 	rootCmd.AddCommand(artist.ArtistCmd)
-	rootCmd.AddCommand(player.PlayCmd)
 	rootCmd.AddCommand(playlist.PlaylistCmd)
 	rootCmd.AddCommand(auth.AuthCmd)
 }
 
 func init() {
-	// cobra.OnInitialize(initConfig)
+	// cobra.OnInitialize(snycClient)
 	initConfig()
-
-	viper.SetDefault("auth.spotify_id", "")
-	viper.SetDefault("auth.spotify_client", "")
+	cobra.OnFinalize(syncClient)
+	viper.SetDefault("auth.client_id", "")
+	viper.SetDefault("auth.client_secret", "")
 	viper.WriteConfig()
 
 	addSubCommands()
+	player.GiveNum()
+}
 
+func syncClient() {
+	getClient := auth.GetClient()
+	if getClient != nil {
+		client = getClient
+		fmt.Println("Client has been passed")
+	}
+	player.PassClient(client)
+	if client == nil {
+		fmt.Println("Client is nil from root")
+	}
 }
 
 func initConfig() {
