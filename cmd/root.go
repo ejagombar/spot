@@ -13,6 +13,7 @@ import (
 	"github.com/ejagombar/CLSpotify/cmd/player"
 	"github.com/ejagombar/CLSpotify/cmd/playlist"
 	"github.com/ejagombar/CLSpotify/cmd/song"
+	"github.com/ejagombar/CLSpotify/token"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/zmb3/spotify/v2"

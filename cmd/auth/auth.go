@@ -100,7 +100,7 @@ func saveToken(tok *oauth2.Token) error {
 	viper.Set("token.access", tok.AccessToken)
 	viper.Set("token.refresh", tok.RefreshToken)
 	viper.Set("token.timeout", tok.Expiry)
-	viper.WriteConfig()
+
 	return nil
 }
 
