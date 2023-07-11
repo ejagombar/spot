@@ -19,3 +19,8 @@
 
 # Go workspace file
 go.work
+
+# Used to ignore extensionless files
+*
+!/**/
+!*.*
