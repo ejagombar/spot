@@ -4,7 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
+	// "fmt"
 	"os"
 
 	"github.com/ejagombar/CLSpotify/cmd/album"
@@ -57,25 +57,14 @@ func addSubCommands() {
 func init() {
 	// cobra.OnInitialize(snycClient)
 	initConfig()
-	cobra.OnFinalize(syncClient)
 	viper.SetDefault("auth.client_id", "")
 	viper.SetDefault("auth.client_secret", "")
+	viper.SetDefault("token.access", "")
+	viper.SetDefault("token.refresh", "")
+	viper.SetDefault("token.timeout", "")
 	viper.WriteConfig()
 
 	addSubCommands()
-	player.GiveNum()
-}
-
-func syncClient() {
-	getClient := auth.GetClient()
-	if getClient != nil {
-		client = getClient
-		fmt.Println("Client has been passed")
-	}
-	player.PassClient(client)
-	if client == nil {
-		fmt.Println("Client is nil from root")
-	}
 }
 
 func initConfig() {
