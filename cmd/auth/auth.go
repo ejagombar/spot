@@ -3,12 +3,15 @@ package auth
 import (
 	"context"
 	"fmt"
+	"log"
+	"net/http"
+	"strings"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/zmb3/spotify/v2"
 	"github.com/zmb3/spotify/v2/auth"
-	"log"
-	"net/http"
+	"golang.org/x/oauth2"
 )
 
 // redirectURI is the OAuth redirect URI for the application.
@@ -17,11 +20,10 @@ import (
 const redirectURI = "http://localhost:8080/callback"
 
 var (
-	auth   *spotifyauth.Authenticator
-	ch     = make(chan *spotify.Client)
-	state  = "abc123"
-	client *spotify.Client
-	form   = `<!DOCTYPE html>
+	auth  *spotifyauth.Authenticator
+	ch    = make(chan *spotify.Client)
+	state = "abc123"
+	form  = `<!DOCTYPE html>
 <html>
 <head>
 <!-- HTML Codes by Quackit.com -->
@@ -54,14 +56,14 @@ func completeAuth(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// use the token to get an authenticated client
-	client = spotify.New(auth.Client(r.Context(), tok))
+	client := spotify.New(auth.Client(r.Context(), tok))
 	w.Header().Set("Content-Type", "text/html; charset=utf8")
 	fmt.Fprintf(w, form)
 
 	ch <- client
 }
 
-func getClient() (client *spotify.Client, err error) {
+func getClient() (client *spotify.Client) {
 	http.HandleFunc("/callback", completeAuth)
 	go func() {
 		err := http.ListenAndServe(":8080", nil)
@@ -75,14 +77,10 @@ func getClient() (client *spotify.Client, err error) {
 
 	client = <-ch
 
-	return client, nil
-}
-
-func GetClient() *spotify.Client {
 	return client
 }
 
-func createRequest() error {
+func createAuthRequest() error {
 	spotify_id := viper.GetString("auth.client_id")
 	spotify_client := viper.GetString("auth.client_secret")
 
@@ -98,18 +96,40 @@ func createRequest() error {
 	return nil
 }
 
+func saveToken(tok *oauth2.Token) error {
+	viper.Set("token.access", tok.AccessToken)
+	viper.Set("token.refresh", tok.RefreshToken)
+	viper.Set("token.timeout", tok.Expiry)
+	viper.WriteConfig()
+	return nil
+}
+
+func runAuth(cmd *cobra.Command, args []string) error {
+	createAuthRequest()
+	client := getClient()
+
+	user, err := client.CurrentUser(context.Background())
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(strings.TrimSpace(user.DisplayName) + "'s account connected!")
+
+	tok, err := client.Token()
+	if err != nil {
+		return err
+	}
+	saveToken(tok)
+
+	return nil
+}
+
 // authCmd represents the auth command
 var AuthCmd = &cobra.Command{
 	Use:   "auth",
 	Short: "Connect your spotify account",
 	Long:  ``,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		createRequest()
-		client2, _ := getClient()
-		user, _ := client2.CurrentUser(context.Background())
-		fmt.Println(user.DisplayName)
-		return nil
-	},
+	RunE:  runAuth,
 }
 
 func init() {
