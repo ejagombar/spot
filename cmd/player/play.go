@@ -2,15 +2,15 @@ package player
 
 import (
 	"context"
-	"fmt"
+	// "fmt"
 
+	"github.com/ejagombar/CLSpotify/authStore"
 	"github.com/spf13/cobra"
-	"github.com/zmb3/spotify/v2"
+	// "github.com/zmb3/spotify/v2"
 )
 
 // playCmd represents the play command
 var (
-	Client  *spotify.Client
 	num     int
 	PlayCmd = &cobra.Command{
 		Use:   "play",
@@ -18,33 +18,18 @@ var (
 		Long: `Plays the current song that is on the player.
         If the song is already playing or there is no song in the player, then nothing will happen.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			// play()
-			PassClient(nil)
+			play()
 		},
 	}
 )
 
 func play() {
-	Client.Play(context.TODO())
+	client := authStore.GetClient()
+	client.Play(context.TODO())
+
 }
 func GiveNum() {
 	num = 5
-}
-
-func PassClient(clientIn *spotify.Client) {
-	if clientIn != nil {
-		Client = clientIn
-		fmt.Print("copied")
-	}
-	if Client != nil {
-		userIn, err := Client.CurrentUser(context.TODO())
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println(userIn.Followers.Count)
-	} else {
-		fmt.Println("client is nil")
-	}
 }
 
 func init() {
