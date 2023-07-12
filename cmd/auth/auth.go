@@ -94,7 +94,9 @@ func createAuthRequest() error {
 			spotifyauth.ScopeUserReadPrivate,
 			spotifyauth.ScopeStreaming,
 			spotifyauth.ScopeUserFollowRead,
-			spotifyauth.ScopeUserModifyPlaybackState))
+			spotifyauth.ScopeUserModifyPlaybackState,
+			spotifyauth.ScopeUserReadPlaybackState,
+			spotifyauth.ScopeUserReadCurrentlyPlaying))
 
 	return nil
 }

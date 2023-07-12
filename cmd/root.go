@@ -7,7 +7,6 @@ import (
 	// "fmt"
 	"os"
 
-	// "github.com/ejagombar/CLSpotify/authStore"
 	"github.com/ejagombar/CLSpotify/cmd/album"
 	"github.com/ejagombar/CLSpotify/cmd/artist"
 	"github.com/ejagombar/CLSpotify/cmd/auth"
@@ -17,7 +16,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/zmb3/spotify/v2"
-	// "github.com/zmb3/spotify/v2"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -55,16 +53,18 @@ func addSubCommands() {
 	rootCmd.AddCommand(auth.AuthCmd)
 }
 
+func preChecks() {}
+
 func init() {
-	// cobra.OnInitialize(snycClient)
 	initConfig()
+
 	viper.SetDefault("auth.client_id", "")
 	viper.SetDefault("auth.client_secret", "")
 	viper.SetDefault("token.access", "")
 	viper.SetDefault("token.refresh", "")
 	viper.SetDefault("token.timeout", "")
 	viper.WriteConfig()
-	// authStore.GetClient()
+
 	addSubCommands()
 }
 

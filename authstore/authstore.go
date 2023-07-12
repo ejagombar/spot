@@ -30,12 +30,7 @@ func GetClient() (client *spotify.Client, err error) {
 
 	auth := spotifyauth.New(
 		spotifyauth.WithClientID(client_id),
-		spotifyauth.WithClientSecret(client_secret),
-		spotifyauth.WithScopes(
-			spotifyauth.ScopeUserReadPrivate,
-			spotifyauth.ScopeStreaming,
-			spotifyauth.ScopeUserFollowRead,
-			spotifyauth.ScopeUserModifyPlaybackState))
+		spotifyauth.WithClientSecret(client_secret))
 
 	timeOut, err := time.Parse(time.RFC1123Z, timeOutStr)
 	if err != nil {

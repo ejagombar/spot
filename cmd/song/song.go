@@ -4,8 +4,11 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package song
 
 import (
+	"context"
 	"fmt"
 
+	"github.com/ejagombar/CLSpotify/authstore"
+	"github.com/ejagombar/CLSpotify/prechecks"
 	"github.com/spf13/cobra"
 )
 
@@ -15,18 +18,13 @@ var SongCmd = &cobra.Command{
 	Short: "Information about the current song",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("song called")
+		client, err := authStore.GetClient()
+		fmt.Println("test")
+		prechecks.DeviceAvailable(client)
+		cobra.CheckErr(err)
+		fmt.Println(client.PlayerDevices(context.Background()))
 	},
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// songCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// songCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
