@@ -2,8 +2,9 @@ package player
 
 import (
 	"context"
-	"fmt"
-	"github.com/ejagombar/CLSpotify/authStore"
+
+	"github.com/ejagombar/CLSpotify/authstore"
+	"github.com/ejagombar/CLSpotify/prechecks"
 	"github.com/spf13/cobra"
 )
 
@@ -15,9 +16,8 @@ var PlayCmd = &cobra.Command{
         If the song is already playing or there is no song in the player, then nothing will happen.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := authStore.GetClient()
-		if err != nil {
-			fmt.Println("Unable to play. Error:", err)
-		}
+		prechecks.DeviceAvailable(client)
+		cobra.CheckErr(err)
 		client.Play(context.Background())
 	},
 }

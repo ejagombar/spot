@@ -2,8 +2,8 @@ package player
 
 import (
 	"context"
-	"fmt"
-	"github.com/ejagombar/CLSpotify/authStore"
+	"github.com/ejagombar/CLSpotify/authstore"
+	"github.com/ejagombar/CLSpotify/prechecks"
 	"github.com/spf13/cobra"
 )
 
@@ -15,9 +15,8 @@ var PauseCmd = &cobra.Command{
     If no song is playing, the command will not do anything.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := authStore.GetClient()
-		if err != nil {
-			fmt.Println("Unable to pause. Error:", err)
-		}
+		prechecks.DeviceAvailable(client)
+		cobra.CheckErr(err)
 		client.Pause(context.Background())
 	},
 }
