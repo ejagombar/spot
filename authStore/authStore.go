@@ -2,6 +2,7 @@ package authStore
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -11,53 +12,42 @@ import (
 	"golang.org/x/oauth2"
 )
 
-const redirectURI = "http://localhost:8080/callback"
+func GetClient() (client *spotify.Client, err error) {
+	client_id := fmt.Sprint(viper.Get("auth.client_id"))
+	client_secret := fmt.Sprint(viper.Get("auth.client_secret"))
 
-var (
-	auth = spotifyauth.New(spotifyauth.WithRedirectURL(redirectURI),
-		spotifyauth.WithClientID("19d7b9add81a4e60a5b032a4677c5801"),
-		spotifyauth.WithClientSecret("38aa053e6ce44ebc946ec379efd7a7c2"),
+	if (client_id == "") || (client_secret == "") {
+		return nil, errors.New("Client secret or ID missing from config file")
+	}
+
+	timeOutStr := fmt.Sprint(viper.Get("token.timeout"))
+	access := fmt.Sprint(viper.Get("token.access"))
+	refresh := fmt.Sprint(viper.Get("token.refresh"))
+
+	if (timeOutStr == "") || (refresh == "") || (access == "") {
+		return nil, errors.New("Token missing from config file")
+	}
+
+	auth := spotifyauth.New(
+		spotifyauth.WithClientID(client_id),
+		spotifyauth.WithClientSecret(client_secret),
 		spotifyauth.WithScopes(
 			spotifyauth.ScopeUserReadPrivate,
 			spotifyauth.ScopeStreaming,
 			spotifyauth.ScopeUserFollowRead,
 			spotifyauth.ScopeUserModifyPlaybackState))
-)
-
-func GetClient() *spotify.Client {
-	timeOutStr := fmt.Sprint(viper.Get("token.timeout"))
-	access := fmt.Sprint(viper.Get("token.access"))
-	refresh := fmt.Sprint(viper.Get("token.refresh"))
-	if timeOutStr == "" {
-		return nil
-	}
 
 	timeOut, err := time.Parse(time.RFC1123Z, timeOutStr)
 	if err != nil {
-		fmt.Println(timeOut.String())
+		return nil, err
 	}
 
 	token := new(oauth2.Token)
 	token.AccessToken = access
 	token.RefreshToken = refresh
 	token.Expiry = timeOut
-	// if token.Valid() == true {
-	// fmt.Println("Token is valid ")
-	// } else {
-	// fmt.Println("Token is not valid ")
 	ctx := context.Background()
-	client := spotify.New(auth.Client(ctx, token))
+	client = spotify.New(auth.Client(ctx, token))
 
-	// user, err := client.CurrentUser(ctx)
-	// if err != nil {
-	// 	fmt.Println("Error", err)
-	// }
-	// fmt.Println("Logged! in as", user.DisplayName)
-
-	// }
-	return client
-}
-
-func GetTime() {
-	fmt.Println(time.Now())
+	return client, nil
 }

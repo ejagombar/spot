@@ -7,13 +7,13 @@ import (
 	// "fmt"
 	"os"
 
+	// "github.com/ejagombar/CLSpotify/authStore"
 	"github.com/ejagombar/CLSpotify/cmd/album"
 	"github.com/ejagombar/CLSpotify/cmd/artist"
 	"github.com/ejagombar/CLSpotify/cmd/auth"
 	"github.com/ejagombar/CLSpotify/cmd/player"
 	"github.com/ejagombar/CLSpotify/cmd/playlist"
 	"github.com/ejagombar/CLSpotify/cmd/song"
-	"github.com/ejagombar/CLSpotify/token"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/zmb3/spotify/v2"
@@ -45,8 +45,8 @@ func Execute() {
 func addSubCommands() {
 	rootCmd.AddCommand(player.PlayCmd)
 	rootCmd.AddCommand(player.PauseCmd)
-	rootCmd.AddCommand(player.SkipCmd)
-	rootCmd.AddCommand(player.BackCmd)
+	rootCmd.AddCommand(player.NextCmd)
+	rootCmd.AddCommand(player.PrevCmd)
 
 	rootCmd.AddCommand(album.AlbumCmd)
 	rootCmd.AddCommand(song.SongCmd)
@@ -64,7 +64,7 @@ func init() {
 	viper.SetDefault("token.refresh", "")
 	viper.SetDefault("token.timeout", "")
 	viper.WriteConfig()
-
+	// authStore.GetClient()
 	addSubCommands()
 }
 
