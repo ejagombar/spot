@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -54,6 +55,8 @@ func completeAuth(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		log.Fatalf("State mismatch: %s != %s\n", st, state)
 	}
+	fmt.Println("Deadline:")
+	fmt.Println(r.Context())
 
 	// use the token to get an authenticated client
 	client := spotify.New(auth.Client(r.Context(), tok))
@@ -99,8 +102,8 @@ func createAuthRequest() error {
 func saveToken(tok *oauth2.Token) error {
 	viper.Set("token.access", tok.AccessToken)
 	viper.Set("token.refresh", tok.RefreshToken)
-	viper.Set("token.timeout", tok.Expiry)
-
+	viper.Set("token.timeout", tok.Expiry.Format(time.RFC1123Z))
+	viper.WriteConfig()
 	return nil
 }
 
@@ -117,7 +120,7 @@ func runAuth(cmd *cobra.Command, args []string) error {
 
 	tok, err := client.Token()
 	if err != nil {
-		return err
+		fmt.Println(err)
 	}
 	saveToken(tok)
 
