@@ -5,16 +5,18 @@ package status
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/ejagombar/CLSpotify/authstore"
 	"github.com/ejagombar/CLSpotify/prechecks"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 type styleConfig struct {
-	startChar       string
-	endChar         string
+	startString     string
+	endString       string
 	completedChar   byte
 	completedHead   string
 	uncompletedChar byte
@@ -28,51 +30,82 @@ var StatusCmd = &cobra.Command{
 	Use:   "status",
 	Short: "Display general info",
 	Long:  ``,
-	Run: func(cmd *cobra.Command, args []string) {
-		client, err := authstore.GetClient()
-		prechecks.DeviceAvailable(client)
-		cobra.CheckErr(err)
-		status, err := client.PlayerCurrentlyPlaying(context.Background())
-		fulltrack := status.Item
+	Run:   status,
+}
 
-		songNameLine := "Song: " + fulltrack.Name
-		albumNameLine := "Album: " + fulltrack.Album.Name
+func status(cmd *cobra.Command, args []string) {
+	client, err := authstore.GetClient()
+	prechecks.DeviceAvailable(client)
+	cobra.CheckErr(err)
+	status, err := client.PlayerCurrentlyPlaying(context.Background())
+	fulltrack := status.Item
 
-		var artistNameLine string
-		artistList := fulltrack.Artists[0].Name
+	songNameLine := "Song: " + fulltrack.Name
+	albumNameLine := "Album: " + fulltrack.Album.Name
 
-		for i := 1; i < len(fulltrack.Artists); i++ {
-			artistList += ", " + fulltrack.Artists[i].Name
-		}
+	var artistNameLine string
+	artistList := fulltrack.Artists[0].Name
 
-		if len(fulltrack.Artists) > 1 {
-			artistNameLine = "Artists: " + artistList
-		} else {
-			artistNameLine = "Artist: " + artistList
-		}
+	for i := 1; i < len(fulltrack.Artists); i++ {
+		artistList += ", " + fulltrack.Artists[i].Name
+	}
 
-		fmt.Println(songNameLine)
-		fmt.Println(albumNameLine)
-		fmt.Println(artistNameLine)
+	if len(fulltrack.Artists) > 1 {
+		artistNameLine = "Artists: " + artistList
+	} else {
+		artistNameLine = "Artist: " + artistList
+	}
 
-		minLength := 35
+	minimumLength := viper.GetInt("appearance.status.bar.minimumlength")
+	barLength := findMinInt([]int{len(songNameLine), len(albumNameLine), len(artistNameLine), minimumLength})
 
-		barLength := findMinInt([]int{len(songNameLine), len(albumNameLine), len(artistNameLine), minLength})
+	progressStamp := secondsToTimestamp(status.Progress / 1000)
+	totalStamp := secondsToTimestamp(fulltrack.Duration / 1000)
 
-		progressStamp := secondsToTimestamp(status.Progress / 1000)
-		totalStamp := secondsToTimestamp(fulltrack.Duration / 1000)
+	style := styleConfig{
+		length:    barLength,
+		frontText: progressStamp,
+		backText:  totalStamp}
 
-		style := styleConfig{
-			startChar:       " |",
-			endChar:         "| ",
-			completedChar:   '-',
-			completedHead:   "",
-			uncompletedChar: ' ',
-			length:          barLength,
-			frontText:       progressStamp,
-			backText:        totalStamp}
-		StaticProgressBar(style, status.Progress, fulltrack.Duration)
-	},
+	err = loadStyle(&style)
+	if err != nil {
+		fmt.Println("Status bar style error:", err)
+		return
+	}
+
+	fmt.Println(songNameLine)
+	fmt.Println(albumNameLine)
+	fmt.Println(artistNameLine)
+
+	StaticProgressBar(style, status.Progress, fulltrack.Duration)
+}
+
+func loadStyle(style *styleConfig) (err error) {
+	startString := fmt.Sprint(viper.Get("appearance.status.bar.startstring"))
+	endString := fmt.Sprint(viper.Get("appearance.status.bar.endstring"))
+	completedHead := fmt.Sprint(viper.Get("appearance.status.bar.completedhead"))
+
+	completedString := fmt.Sprint(viper.Get("appearance.status.bar.completedchar"))
+	uncompletedString := fmt.Sprint(viper.Get("appearance.status.bar.uncompletedchar"))
+
+	if len(completedString) != 1 {
+		err := errors.New("completedchar is not of type char")
+		return err
+	}
+	if len(uncompletedString) != 1 {
+		err := errors.New("uncompletedchar is not of type char")
+		return err
+	}
+
+	completedChar := byte(completedString[0])
+	uncompletedChar := byte(uncompletedString[0])
+
+	style.startString = startString
+	style.endString = endString
+	style.completedChar = completedChar
+	style.completedHead = completedHead
+	style.uncompletedChar = uncompletedChar
+	return nil
 }
 
 func findMinInt(values []int) (min int) {
@@ -93,10 +126,10 @@ func secondsToTimestamp(secondsIn int) string {
 }
 
 func StaticProgressBar(style styleConfig, progress int, total int) {
-	paddingLength := len(style.endChar + style.startChar + style.frontText + style.backText)
+	paddingLength := len(style.endString + style.startString + style.frontText + style.backText)
 	barLength := style.length - paddingLength
 	percentage := int((float32(progress)/float32(total))*float32(barLength) + 0.5)
-	fmt.Print(style.frontText + style.startChar)
+	fmt.Print(style.frontText + style.startString)
 
 	remainingLength := barLength - percentage
 
@@ -118,7 +151,7 @@ func StaticProgressBar(style styleConfig, progress int, total int) {
 		fmt.Print(string(style.uncompletedChar))
 	}
 
-	fmt.Print(style.endChar + style.backText + "\n")
+	fmt.Print(style.endString + style.backText + "\n")
 }
 
 func init() {

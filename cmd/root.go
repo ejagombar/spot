@@ -69,6 +69,13 @@ func init() {
 	viper.SetDefault("token.refresh", "")
 	viper.SetDefault("token.timeout", "")
 	viper.SetDefault("config.defaultdeviceid", "")
+	viper.SetDefault("appearance.status.bar.startstring", " [")
+	viper.SetDefault("appearance.status.bar.endstring", "] ")
+	viper.SetDefault("appearance.status.bar.completedchar", "=")
+	viper.SetDefault("appearance.status.bar.completedhead", "")
+	viper.SetDefault("appearance.status.bar.uncompletedchar", " ")
+	viper.SetDefault("appearance.status.bar.minimumlength", 35)
+
 	viper.WriteConfig()
 
 	addSubCommands()
