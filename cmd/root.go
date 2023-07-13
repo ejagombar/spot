@@ -12,6 +12,8 @@ import (
 	"github.com/ejagombar/CLSpotify/cmd/auth"
 	"github.com/ejagombar/CLSpotify/cmd/config"
 	"github.com/ejagombar/CLSpotify/cmd/player"
+	"github.com/ejagombar/CLSpotify/cmd/status"
+
 	// "github.com/ejagombar/CLSpotify/cmd/playlist"
 	"github.com/ejagombar/CLSpotify/cmd/song"
 	"github.com/spf13/cobra"
@@ -53,6 +55,7 @@ func addSubCommands() {
 	// rootCmd.AddCommand(artist.ArtistCmd)
 	// rootCmd.AddCommand(playlist.PlaylistCmd)
 	rootCmd.AddCommand(auth.LoginCmd)
+	rootCmd.AddCommand(status.StatusCmd)
 }
 
 func preChecks() {}
