@@ -2,17 +2,17 @@ package auth
 
 import (
 	"context"
+	_ "embed"
 	"fmt"
-	"log"
-	"net/http"
-	"strings"
-	"time"
-
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/zmb3/spotify/v2"
 	"github.com/zmb3/spotify/v2/auth"
 	"golang.org/x/oauth2"
+	"log"
+	"net/http"
+	"strings"
+	"time"
 )
 
 // redirectURI is the OAuth redirect URI for the application.
@@ -21,28 +21,11 @@ import (
 const redirectURI = "http://localhost:8080/callback"
 
 var (
+	//go:embed callback.html
+	form  string
 	auth  *spotifyauth.Authenticator
 	ch    = make(chan *spotify.Client)
 	state = "abc123"
-	form  = `<!DOCTYPE html>
-<html>
-<head>
-<!-- HTML Codes by Quackit.com -->
-<title>
-Login Complete!</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {background-color:#000000;background-repeat:no-repeat;background-position:top left;background-attachment:fixed;}
-h1{text-align:center;font-family:Helvetica, sans-serif;color:#ffffff;background-color:#000000;}
-p {text-align:center;font-family:Helvetica, sans-serif;font-size:18px;font-style:normal;font-weight:normal;color:#ffffff;background-color:#000000;}
-</style>
-</head>
-<body>
-<h1>Login Complete!</h1>
-<p>Please return to your terminal to continue</p>
-</body>
-</html>
-`
 )
 
 func completeAuth(w http.ResponseWriter, r *http.Request) {
