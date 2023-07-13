@@ -44,7 +44,7 @@ func addSubCommands() {
 	rootCmd.AddCommand(player.PlayCmd)
 	rootCmd.AddCommand(player.PauseCmd)
 	rootCmd.AddCommand(player.NextCmd)
-	rootCmd.AddCommand(player.PrevCmd)
+	rootCmd.AddCommand(player.BackCmd)
 
 	rootCmd.AddCommand(album.AlbumCmd)
 	rootCmd.AddCommand(song.SongCmd)
