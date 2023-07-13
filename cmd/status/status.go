@@ -9,9 +9,18 @@ import (
 
 	"github.com/ejagombar/CLSpotify/authstore"
 	"github.com/ejagombar/CLSpotify/prechecks"
-	"github.com/schollz/progressbar/v3"
 	"github.com/spf13/cobra"
 )
+
+type styleConfig struct {
+	startChar       string
+	endChar         string
+	completedChar   byte
+	uncompletedChar byte
+	frontText       string
+	backText        string
+	length          int
+}
 
 // StatusCmd represents the album command
 var StatusCmd = &cobra.Command{
@@ -37,14 +46,24 @@ var StatusCmd = &cobra.Command{
 		} else {
 			fmt.Println("Artist:", artistList)
 		}
-
-		songProgress := status.Progress
-		theme := progressbar.Theme{Saucer: "-", SaucerHead: ">", AltSaucerHead: "<", SaucerPadding: " ", BarStart: "|", BarEnd: "|"}
-
-		bar := progressbar.NewOptions(fulltrack.Duration, progressbar.OptionSetTheme(theme), progressbar.OptionSetWidth(20))
-		bar.Set(songProgress)
-
+		// songProgress := status.Progress
+		style := styleConfig{startChar: "|", endChar: "|", completedChar: '-', uncompletedChar: ' ', length: 30}
+		StaticProgressBar(style, status.Progress, fulltrack.Duration)
 	},
+}
+
+func StaticProgressBar(style styleConfig, progress int, total int) {
+	paddingLength := len(style.endChar + style.startChar)
+	barLength := style.length - paddingLength
+	percentage := int((float32(progress)/float32(total))*float32(barLength) + 0.5)
+	fmt.Print(style.frontText + style.startChar)
+	for i := 0; i < percentage; i++ {
+		fmt.Print(string(style.completedChar))
+	}
+	for i := 0; i < style.length-percentage; i++ {
+		fmt.Print(string(style.uncompletedChar))
+	}
+	fmt.Print(style.endChar + style.backText + "\n")
 }
 
 func init() {
