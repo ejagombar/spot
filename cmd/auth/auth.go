@@ -113,8 +113,8 @@ func runAuth(cmd *cobra.Command, args []string) error {
 }
 
 // authCmd represents the auth command
-var AuthCmd = &cobra.Command{
-	Use:   "auth",
+var LoginCmd = &cobra.Command{
+	Use:   "login",
 	Short: "Connect your spotify account",
 	Long:  ``,
 	RunE:  runAuth,
