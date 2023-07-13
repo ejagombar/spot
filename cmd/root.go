@@ -65,6 +65,7 @@ func init() {
 	viper.SetDefault("token.access", "")
 	viper.SetDefault("token.refresh", "")
 	viper.SetDefault("token.timeout", "")
+	viper.SetDefault("config.defaultdeviceid", "")
 	viper.WriteConfig()
 
 	addSubCommands()

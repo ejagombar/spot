@@ -29,7 +29,7 @@ func config(cmd *cobra.Command, args []string) {
 		playerDevices, _ := client.PlayerDevices(context.Background())
 		for _, device := range playerDevices {
 			if device.Active == true {
-				viper.Set("config.defaultDeviceID", device.ID.String())
+				viper.Set("config.defaultdeviceid", device.ID.String())
 				err := viper.WriteConfig()
 				cobra.CheckErr(err)
 				fmt.Println("Success: '" + device.Name + "' set as the default device")

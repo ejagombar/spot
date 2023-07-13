@@ -2,11 +2,13 @@ package player
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/ejagombar/CLSpotify/authstore"
 	"github.com/ejagombar/CLSpotify/prechecks"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"github.com/zmb3/spotify/v2"
 )
 
@@ -20,18 +22,37 @@ var PlayCmd = &cobra.Command{
 		client, err := authstore.GetClient()
 		prechecks.DeviceAvailable(client)
 		cobra.CheckErr(err)
-		playerDevice, _ := client.PlayerDevices(context.Background())
-		var test spotify.ID
-		for _, x := range playerDevice {
-			fmt.Println("Device: ")
-			fmt.Println(x.ID)
-			fmt.Println(x.Active)
-		}
-		// test = "4c3d363bf10d7394fdb1ed924359604508387da8"
-		test = "71910c9ed689f71f4e8724883615d4661d717700"
-		opts := spotify.PlayOptions{DeviceID: &test}
+
+		deviceID, err := selectDevice(client)
+		cobra.CheckErr(err)
+
+		opts := spotify.PlayOptions{DeviceID: &deviceID}
 		client.PlayOpt(context.Background(), &opts)
 	},
+}
+
+func selectDevice(client *spotify.Client) (deviceID spotify.ID, err error) {
+	playerDevice, _ := client.PlayerDevices(context.Background())
+	defaultDevice := fmt.Sprint(viper.Get("config.defaultdeviceid"))
+
+	if len(playerDevice) < 1 {
+		return "", errors.New("No devices available")
+	}
+
+	deviceID = playerDevice[0].ID
+
+	if defaultDevice == "" {
+		return deviceID, nil
+	}
+
+	for _, device := range playerDevice {
+		if device.ID.String() == defaultDevice {
+			deviceID = device.ID
+			break
+		}
+	}
+
+	return deviceID, nil
 }
 
 func init() {
