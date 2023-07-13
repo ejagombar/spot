@@ -9,9 +9,10 @@ import (
 
 // skipCmd represents the skip command
 var NextCmd = &cobra.Command{
-	Use:   "next",
-	Short: "Play the next song",
-	Long:  ``,
+	Use:        "next",
+	Short:      "Play the next song",
+	Long:       ``,
+	SuggestFor: []string{"skip", "forward"},
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := authStore.GetClient()
 		prechecks.DeviceAvailable(client)

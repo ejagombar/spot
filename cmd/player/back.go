@@ -8,10 +8,11 @@ import (
 )
 
 // backCmd represents the back command
-var PrevCmd = &cobra.Command{
-	Use:   "prev",
-	Short: "Skip back to the previous song",
-	Long:  ``,
+var BackCmd = &cobra.Command{
+	Use:        "back",
+	Short:      "Skip back to the previous song",
+	Long:       ``,
+	SuggestFor: []string{"prev", "previous"},
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := authStore.GetClient()
 		prechecks.DeviceAvailable(client)
