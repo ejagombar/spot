@@ -1,4 +1,4 @@
-package authStore
+package authstore
 
 import (
 	"context"

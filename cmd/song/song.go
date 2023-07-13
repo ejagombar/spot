@@ -18,11 +18,15 @@ var SongCmd = &cobra.Command{
 	Short: "Information about the current song",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		client, err := authStore.GetClient()
+		client, err := authstore.GetClient()
 		fmt.Println("test")
 		prechecks.DeviceAvailable(client)
 		cobra.CheckErr(err)
-		fmt.Println(client.PlayerDevices(context.Background()))
+		playerDevice, _ := client.PlayerDevices(context.Background())
+		fmt.Println("is device restricted", playerDevice[0].ID)
+		fmt.Println("is device restricted", playerDevice[0].Restricted)
+		fmt.Println("is device active", playerDevice[0].Active)
+
 	},
 }
 

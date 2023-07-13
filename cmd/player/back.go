@@ -14,7 +14,7 @@ var BackCmd = &cobra.Command{
 	Long:       ``,
 	SuggestFor: []string{"prev", "previous"},
 	Run: func(cmd *cobra.Command, args []string) {
-		client, err := authStore.GetClient()
+		client, err := authstore.GetClient()
 		prechecks.DeviceAvailable(client)
 		cobra.CheckErr(err)
 		client.Previous(context.Background())

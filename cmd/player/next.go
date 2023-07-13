@@ -14,7 +14,7 @@ var NextCmd = &cobra.Command{
 	Long:       ``,
 	SuggestFor: []string{"skip", "forward"},
 	Run: func(cmd *cobra.Command, args []string) {
-		client, err := authStore.GetClient()
+		client, err := authstore.GetClient()
 		prechecks.DeviceAvailable(client)
 		cobra.CheckErr(err)
 		client.Next(context.Background())

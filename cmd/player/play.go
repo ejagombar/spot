@@ -17,7 +17,7 @@ var PlayCmd = &cobra.Command{
 	Long: `Plays the current song that is on the player.
         If the song is already playing or there is no song in the player, then nothing will happen.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		client, err := authStore.GetClient()
+		client, err := authstore.GetClient()
 		prechecks.DeviceAvailable(client)
 		cobra.CheckErr(err)
 		playerDevice, _ := client.PlayerDevices(context.Background())

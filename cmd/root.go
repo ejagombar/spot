@@ -7,11 +7,12 @@ import (
 	// "fmt"
 	"os"
 
-	"github.com/ejagombar/CLSpotify/cmd/album"
-	"github.com/ejagombar/CLSpotify/cmd/artist"
+	// "github.com/ejagombar/CLSpotify/cmd/album"
+	// "github.com/ejagombar/CLSpotify/cmd/artist"
 	"github.com/ejagombar/CLSpotify/cmd/auth"
+	"github.com/ejagombar/CLSpotify/cmd/config"
 	"github.com/ejagombar/CLSpotify/cmd/player"
-	"github.com/ejagombar/CLSpotify/cmd/playlist"
+	// "github.com/ejagombar/CLSpotify/cmd/playlist"
 	"github.com/ejagombar/CLSpotify/cmd/song"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -46,11 +47,12 @@ func addSubCommands() {
 	rootCmd.AddCommand(player.NextCmd)
 	rootCmd.AddCommand(player.BackCmd)
 
-	rootCmd.AddCommand(album.AlbumCmd)
+	// rootCmd.AddCommand(album.AlbumCmd)
 	rootCmd.AddCommand(song.SongCmd)
-	rootCmd.AddCommand(artist.ArtistCmd)
-	rootCmd.AddCommand(playlist.PlaylistCmd)
-	rootCmd.AddCommand(auth.AuthCmd)
+	rootCmd.AddCommand(config.ConfigCmd)
+	// rootCmd.AddCommand(artist.ArtistCmd)
+	// rootCmd.AddCommand(playlist.PlaylistCmd)
+	rootCmd.AddCommand(auth.LoginCmd)
 }
 
 func preChecks() {}
