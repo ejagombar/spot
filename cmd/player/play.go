@@ -26,8 +26,27 @@ var PlayCmd = &cobra.Command{
 		deviceID, err := selectDevice(client)
 		cobra.CheckErr(err)
 
-		opts := spotify.PlayOptions{DeviceID: &deviceID}
-		client.PlayOpt(context.Background(), &opts)
+		if len(args) > 0 {
+			songName := ""
+			for _, word := range args {
+				songName += word + " "
+			}
+			fmt.Println("SongName:" + songName)
+
+			result, err := client.Search(context.Background(), songName, spotify.SearchType(spotify.SearchTypeTrack))
+			if err != nil {
+				fmt.Println("Error:", err)
+				return
+			}
+			uri := result.Tracks.Tracks[0].URI
+			fmt.Println(string(uri))
+			opts := spotify.PlayOptions{DeviceID: &deviceID,
+				URIs: []spotify.URI{uri}}
+			client.PlayOpt(context.Background(), &opts)
+		} else {
+			opts := spotify.PlayOptions{DeviceID: &deviceID}
+			client.PlayOpt(context.Background(), &opts)
+		}
 	},
 }
 
