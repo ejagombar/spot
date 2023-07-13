@@ -18,36 +18,49 @@ var PlayCmd = &cobra.Command{
 	Short: "Plays the current song",
 	Long: `Plays the current song that is on the player.
         If the song is already playing or there is no song in the player, then nothing will happen.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		client, err := authstore.GetClient()
-		prechecks.DeviceAvailable(client)
-		cobra.CheckErr(err)
+	Run: play,
+}
 
-		deviceID, err := selectDevice(client)
-		cobra.CheckErr(err)
+func play(cmd *cobra.Command, args []string) {
+	client, err := authstore.GetClient()
+	prechecks.DeviceAvailable(client)
+	cobra.CheckErr(err)
 
-		if len(args) > 0 {
-			songName := ""
-			for _, word := range args {
-				songName += word + " "
-			}
-			fmt.Println("SongName:" + songName)
+	deviceID, err := selectDevice(client)
+	cobra.CheckErr(err)
 
-			result, err := client.Search(context.Background(), songName, spotify.SearchType(spotify.SearchTypeTrack))
-			if err != nil {
-				fmt.Println("Error:", err)
-				return
-			}
-			uri := result.Tracks.Tracks[0].URI
-			fmt.Println(string(uri))
-			opts := spotify.PlayOptions{DeviceID: &deviceID,
-				URIs: []spotify.URI{uri}}
-			client.PlayOpt(context.Background(), &opts)
-		} else {
-			opts := spotify.PlayOptions{DeviceID: &deviceID}
-			client.PlayOpt(context.Background(), &opts)
-		}
-	},
+	if len(args) > 0 {
+		searchAndPlay(client, deviceID, args)
+	} else {
+		opts := spotify.PlayOptions{DeviceID: &deviceID}
+		client.PlayOpt(context.Background(), &opts)
+	}
+}
+
+func searchAndPlay(client *spotify.Client, deviceID spotify.ID, args []string) {
+	songName := ""
+	for _, word := range args {
+		songName += word + " "
+	}
+
+	result, err := client.Search(context.Background(), songName, spotify.SearchType(spotify.SearchTypeTrack))
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	uri := result.Tracks.Tracks[0].URI
+	// ids := result.Tracks.Tracks[0].ID
+	opts := spotify.PlayOptions{DeviceID: &deviceID,
+		URIs: []spotify.URI{uri}}
+	client.PlayOpt(context.Background(), &opts)
+
+	// recommendations, err := client.GetRecommendations(context.Background(), spotify.Seeds{Tracks: []spotify.ID{ids}}, spotify.NewTrackAttributes())
+	//
+	// 	client.QueueSongOpt()
+	// for _, track := range recommendations.Tracks {
+	// 	fmt.Println(track.Name)
+	// 	client.QueueSong(context.Background(), track.ID)
+	// }
 }
 
 func selectDevice(client *spotify.Client) (deviceID spotify.ID, err error) {
