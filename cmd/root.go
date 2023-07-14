@@ -1,21 +1,15 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
 	// "fmt"
 	"os"
 
-	// "github.com/ejagombar/CLSpotify/cmd/album"
-	// "github.com/ejagombar/CLSpotify/cmd/artist"
-	"github.com/ejagombar/CLSpotify/cmd/auth"
 	"github.com/ejagombar/CLSpotify/cmd/config"
+	"github.com/ejagombar/CLSpotify/cmd/info"
+	"github.com/ejagombar/CLSpotify/cmd/login"
 	"github.com/ejagombar/CLSpotify/cmd/player"
-	"github.com/ejagombar/CLSpotify/cmd/status"
+	"github.com/ejagombar/CLSpotify/cmd/player/play"
 
-	// "github.com/ejagombar/CLSpotify/cmd/playlist"
-	"github.com/ejagombar/CLSpotify/cmd/song"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/zmb3/spotify/v2"
@@ -44,18 +38,14 @@ func Execute() {
 }
 
 func addSubCommands() {
-	rootCmd.AddCommand(player.PlayCmd)
+	rootCmd.AddCommand(play.PlayCmd)
 	rootCmd.AddCommand(player.PauseCmd)
 	rootCmd.AddCommand(player.NextCmd)
 	rootCmd.AddCommand(player.BackCmd)
 
-	// rootCmd.AddCommand(album.AlbumCmd)
-	rootCmd.AddCommand(song.SongCmd)
 	rootCmd.AddCommand(config.ConfigCmd)
-	// rootCmd.AddCommand(artist.ArtistCmd)
-	// rootCmd.AddCommand(playlist.PlaylistCmd)
-	rootCmd.AddCommand(auth.LoginCmd)
-	rootCmd.AddCommand(status.StatusCmd)
+	rootCmd.AddCommand(login.LoginCmd)
+	rootCmd.AddCommand(info.StatusCmd)
 }
 
 func preChecks() {}

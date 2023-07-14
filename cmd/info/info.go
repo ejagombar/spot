@@ -1,7 +1,7 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 */
-package status
+package info
 
 import (
 	"context"
@@ -27,7 +27,7 @@ type styleConfig struct {
 
 // StatusCmd represents the album command
 var StatusCmd = &cobra.Command{
-	Use:   "status",
+	Use:   "info",
 	Short: "Display general info",
 	Long:  ``,
 	Run:   status,
