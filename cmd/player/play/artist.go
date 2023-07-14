@@ -12,9 +12,9 @@ import (
 )
 
 // pauseCmd represents the pause command
-var SongCmd = &cobra.Command{
-	Use:   "song",
-	Short: "Specifies the search for songs",
+var ArtistCmd = &cobra.Command{
+	Use:   "artist",
+	Short: "Specifies the search for albums",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := authstore.GetClient()
@@ -24,22 +24,22 @@ var SongCmd = &cobra.Command{
 		cobra.CheckErr(err)
 
 		if len(args) > 0 {
-			SearchSongAndPlay(client, deviceID, ConcatArgs(args))
+			searchAlbumAndPlay(client, deviceID, ConcatArgs(args))
 		} else {
-			err = errors.New("Song name not provided")
+			err = errors.New("Artist name not provided")
 		}
 		cobra.CheckErr(err)
 	},
 }
 
-func SearchSongAndPlay(client *spotify.Client, deviceid spotify.ID, songname string) (err error) {
-	result, err := client.Search(context.Background(), songname, spotify.SearchType(spotify.SearchTypeTrack), spotify.Limit(1))
+func searchArtistAndPlay(client *spotify.Client, deviceid spotify.ID, artistName string) (err error) {
+	result, err := client.Search(context.Background(), artistName, spotify.SearchType(spotify.SearchTypeArtist), spotify.Limit(1))
 	if err != nil {
-		return fmt.Errorf("Error while searching for song: %w", err)
+		return fmt.Errorf("Error while searching for artist: %w", err)
 	}
 
-	uri := result.Tracks.Tracks[0].URI
-	opts := spotify.PlayOptions{DeviceID: &deviceid, URIs: []spotify.URI{uri}}
+	uri := result.Artists.Artists[0].URI
+	opts := spotify.PlayOptions{DeviceID: &deviceid, PlaybackContext: &uri}
 	err = client.PlayOpt(context.Background(), &opts)
 
 	if err != nil {
