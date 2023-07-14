@@ -39,4 +39,5 @@ func init() {
 	PlayCmd.AddCommand(SongCmd)
 	PlayCmd.AddCommand(AlbumCmd)
 	PlayCmd.AddCommand(ArtistCmd)
+	PlayCmd.AddCommand(PlaylistCmd)
 }
