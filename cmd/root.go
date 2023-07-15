@@ -65,6 +65,8 @@ func init() {
 	viper.SetDefault("appearance.status.bar.completedhead", "")
 	viper.SetDefault("appearance.status.bar.uncompletedchar", " ")
 	viper.SetDefault("appearance.status.bar.minimumlength", 35)
+	viper.SetDefault("myplaylists.items", "")
+	viper.SetDefault("myplaylists.length", 0)
 
 	viper.WriteConfig()
 
