@@ -4,13 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
-
 	"github.com/ejagombar/CLSpotify/authstore"
 	"github.com/ejagombar/CLSpotify/prechecks"
-	"github.com/ktr0731/go-fuzzyfinder"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/texttheater/golang-levenshtein/levenshtein"
 	"github.com/zmb3/spotify/v2"
+	"strings"
 )
 
 // pauseCmd represents the pause command
@@ -108,10 +108,25 @@ func searchPlaylistAndPlay(client *spotify.Client, deviceID spotify.ID, playlist
 	}
 
 	playlists, _ := loadUserPlaylists()
-	bagsize := []int{2}
-	cm := closestmatch.New(extractStrings(playlists), bagsize)
 
-	fmt.Println(cm.Closest(playlistName))
+	bestMatchIndex := -1
+	bestMatchDistance := -1
+
+	for i, item := range playlists {
+		distance := levenshtein.DistanceForStrings([]rune(strings.ToLower(item.Name)), []rune(strings.ToLower(playlistName)), levenshtein.DefaultOptions)
+		if bestMatchDistance == -1 || distance < bestMatchDistance {
+			bestMatchDistance = distance
+			bestMatchIndex = i
+		}
+	}
+
+	if bestMatchIndex == -1 {
+		return errors.New("No match found")
+	}
+	fmt.Println("Best match:", playlists[bestMatchIndex].Name)
+	opts := spotify.PlayOptions{DeviceID: &deviceID, PlaybackContext: &playlists[bestMatchIndex].URI}
+	err = client.PlayOpt(context.Background(), &opts)
+
 	if err != nil {
 		return fmt.Errorf("Error while attempting to play: %w", err)
 	}
