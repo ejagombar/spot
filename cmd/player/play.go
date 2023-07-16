@@ -1,9 +1,10 @@
-package play
+package player
 
 import (
 	"context"
 
 	"github.com/ejagombar/CLSpotify/authstore"
+	"github.com/ejagombar/CLSpotify/common"
 	"github.com/ejagombar/CLSpotify/prechecks"
 	"github.com/spf13/cobra"
 	"github.com/zmb3/spotify/v2"
@@ -23,21 +24,17 @@ func play(cmd *cobra.Command, args []string) {
 	prechecks.DeviceAvailable(client)
 	cobra.CheckErr(err)
 
-	deviceID, err := SelectDevice(client)
+	deviceID, err := common.SelectDevice(client)
 	cobra.CheckErr(err)
 
-	if len(args) > 0 {
-		err = SearchSongAndPlay(client, deviceID, ConcatArgs(args))
-	} else {
-		opts := spotify.PlayOptions{DeviceID: &deviceID}
-		client.PlayOpt(context.Background(), &opts)
-	}
-	cobra.CheckErr(err)
+	// if len(args) > 0 {
+	// 	err = SearchSongAndPlay(client, deviceID, common.ConcatArgs(args))
+	// } else {
+	opts := spotify.PlayOptions{DeviceID: &deviceID}
+	client.PlayOpt(context.Background(), &opts)
+	// }
+	// cobra.CheckErr(err)
 }
 
 func init() {
-	PlayCmd.AddCommand(SongCmd)
-	PlayCmd.AddCommand(AlbumCmd)
-	PlayCmd.AddCommand(ArtistCmd)
-	PlayCmd.AddCommand(PlaylistCmd)
 }

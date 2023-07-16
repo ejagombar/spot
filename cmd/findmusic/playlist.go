@@ -1,10 +1,11 @@
-package play
+package findmusic
 
 import (
 	"context"
 	"errors"
 	"fmt"
 	"github.com/ejagombar/CLSpotify/authstore"
+	"github.com/ejagombar/CLSpotify/common"
 	"github.com/ejagombar/CLSpotify/prechecks"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -22,11 +23,11 @@ var PlaylistCmd = &cobra.Command{
 		client, err := authstore.GetClient()
 		prechecks.DeviceAvailable(client)
 
-		deviceID, err := SelectDevice(client)
+		deviceID, err := common.SelectDevice(client)
 		cobra.CheckErr(err)
 
 		if len(args) > 0 {
-			searchPlaylistAndPlay(client, deviceID, ConcatArgs(args))
+			searchPlaylistAndPlay(client, deviceID, common.ConcatArgs(args))
 		} else {
 			err = errors.New("Playlist name not provided")
 		}

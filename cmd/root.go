@@ -5,10 +5,10 @@ import (
 	"os"
 
 	"github.com/ejagombar/CLSpotify/cmd/config"
+	"github.com/ejagombar/CLSpotify/cmd/findmusic"
 	"github.com/ejagombar/CLSpotify/cmd/info"
 	"github.com/ejagombar/CLSpotify/cmd/login"
 	"github.com/ejagombar/CLSpotify/cmd/player"
-	"github.com/ejagombar/CLSpotify/cmd/player/play"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -38,14 +38,20 @@ func Execute() {
 }
 
 func addSubCommands() {
-	rootCmd.AddCommand(play.PlayCmd)
+	rootCmd.AddCommand(player.PlayCmd)
 	rootCmd.AddCommand(player.PauseCmd)
 	rootCmd.AddCommand(player.NextCmd)
 	rootCmd.AddCommand(player.BackCmd)
+	rootCmd.AddCommand(player.ShuffleCmd)
 
 	rootCmd.AddCommand(config.ConfigCmd)
 	rootCmd.AddCommand(login.LoginCmd)
 	rootCmd.AddCommand(info.StatusCmd)
+
+	rootCmd.AddCommand(findmusic.SongCmd)
+	rootCmd.AddCommand(findmusic.AlbumCmd)
+	rootCmd.AddCommand(findmusic.ArtistCmd)
+	rootCmd.AddCommand(findmusic.PlaylistCmd)
 }
 
 func preChecks() {}
