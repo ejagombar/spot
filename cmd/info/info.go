@@ -17,9 +17,9 @@ import (
 type styleConfig struct {
 	startString     string
 	endString       string
-	completedChar   byte
+	completedChar   string
 	completedHead   string
-	uncompletedChar byte
+	uncompletedChar string
 	frontText       string
 	backText        string
 	length          int
@@ -88,23 +88,20 @@ func loadStyle(style *styleConfig) (err error) {
 	completedString := fmt.Sprint(viper.Get("appearance.status.bar.completedchar"))
 	uncompletedString := fmt.Sprint(viper.Get("appearance.status.bar.uncompletedchar"))
 
-	if len(completedString) != 1 {
+	if len(completedString) < 1 {
 		err := errors.New("completedchar is not of type char")
 		return err
 	}
-	if len(uncompletedString) != 1 {
+	if len(uncompletedString) < 1 {
 		err := errors.New("uncompletedchar is not of type char")
 		return err
 	}
 
-	completedChar := byte(completedString[0])
-	uncompletedChar := byte(uncompletedString[0])
-
 	style.startString = startString
 	style.endString = endString
-	style.completedChar = completedChar
+	style.completedChar = completedString
 	style.completedHead = completedHead
-	style.uncompletedChar = uncompletedChar
+	style.uncompletedChar = uncompletedString
 	return nil
 }
 

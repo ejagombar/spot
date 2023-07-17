@@ -44,7 +44,6 @@ func addSubCommands() {
 	rootCmd.AddCommand(player.NextCmd)
 	rootCmd.AddCommand(player.BackCmd)
 	rootCmd.AddCommand(player.ShuffleCmd)
-	rootCmd.AddCommand(player.QueueCmd)
 
 	rootCmd.AddCommand(add.AddCmd)
 
