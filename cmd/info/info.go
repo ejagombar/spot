@@ -123,7 +123,7 @@ func secondsToTimestamp(secondsIn int) string {
 }
 
 func StaticProgressBar(style styleConfig, progress int, total int) {
-	paddingLength := len(style.endString + style.startString + style.frontText + style.backText)
+	paddingLength := len([]rune(style.endString + style.startString + style.frontText + style.backText))
 	barLength := style.length - paddingLength
 	percentage := int((float32(progress)/float32(total))*float32(barLength) + 0.5)
 	fmt.Print(style.frontText + style.startString)
