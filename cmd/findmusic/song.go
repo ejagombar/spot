@@ -13,8 +13,8 @@ import (
 
 // pauseCmd represents the pause command
 var (
-	queueSong bool = false
-	SongCmd        = &cobra.Command{
+	queueSong bool
+	SongCmd   = &cobra.Command{
 		Use:   "song",
 		Short: "Specifies the search for songs",
 		Long:  ``,
@@ -54,5 +54,5 @@ func SearchSongAndPlay(client *spotify.Client, deviceid spotify.ID, songname str
 }
 
 func init() {
-	SongCmd.Flags().BoolVarP(&queueSong, "queue", "q", true, "If this flag is set, the song will be added to the queue")
+	SongCmd.Flags().BoolVarP(&queueSong, "queue", "q", false, "If this flag is set, the song will be added to the queue")
 }

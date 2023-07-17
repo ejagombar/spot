@@ -49,7 +49,7 @@ func addSubCommands() {
 
 	rootCmd.AddCommand(config.ConfigCmd)
 	rootCmd.AddCommand(login.LoginCmd)
-	rootCmd.AddCommand(info.StatusCmd)
+	rootCmd.AddCommand(info.InfoCmd)
 
 	rootCmd.AddCommand(findmusic.SongCmd)
 	rootCmd.AddCommand(findmusic.AlbumCmd)
