@@ -38,8 +38,6 @@ func completeAuth(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		log.Fatalf("State mismatch: %s != %s\n", st, state)
 	}
-	fmt.Println("Deadline:")
-	fmt.Println(r.Context())
 
 	// use the token to get an authenticated client
 	client := spotify.New(auth.Client(r.Context(), tok))
@@ -77,8 +75,11 @@ func createAuthRequest() error {
 			spotifyauth.ScopeUserReadPrivate,
 			spotifyauth.ScopeStreaming,
 			spotifyauth.ScopeUserFollowRead,
+			spotifyauth.ScopeUserLibraryRead,
 			spotifyauth.ScopeUserModifyPlaybackState,
+			spotifyauth.ScopePlaylistModifyPrivate,
 			spotifyauth.ScopeUserReadPlaybackState,
+			spotifyauth.ScopePlaylistModifyPublic,
 			spotifyauth.ScopeUserReadCurrentlyPlaying))
 
 	return nil
