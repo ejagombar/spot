@@ -2,6 +2,7 @@ package player
 
 import (
 	"context"
+
 	"github.com/ejagombar/CLSpotify/authstore"
 	"github.com/ejagombar/CLSpotify/prechecks"
 	"github.com/spf13/cobra"

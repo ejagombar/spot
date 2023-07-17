@@ -4,6 +4,7 @@ import (
 	// "fmt"
 	"os"
 
+	"github.com/ejagombar/CLSpotify/cmd/add"
 	"github.com/ejagombar/CLSpotify/cmd/config"
 	"github.com/ejagombar/CLSpotify/cmd/findmusic"
 	"github.com/ejagombar/CLSpotify/cmd/info"
@@ -43,6 +44,9 @@ func addSubCommands() {
 	rootCmd.AddCommand(player.NextCmd)
 	rootCmd.AddCommand(player.BackCmd)
 	rootCmd.AddCommand(player.ShuffleCmd)
+	rootCmd.AddCommand(player.QueueCmd)
+
+	rootCmd.AddCommand(add.AddCmd)
 
 	rootCmd.AddCommand(config.ConfigCmd)
 	rootCmd.AddCommand(login.LoginCmd)
