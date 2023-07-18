@@ -70,8 +70,8 @@ func init() {
 	viper.SetDefault("appearance.status.bar.startstring", " │")
 	viper.SetDefault("appearance.status.bar.endstring", "│ ")
 	viper.SetDefault("appearance.status.bar.completedchar", "▒")
-	viper.SetDefault("appearance.status.bar.completedhead", "░")
-	viper.SetDefault("appearance.status.bar.uncompletedchar", " ")
+	viper.SetDefault("appearance.status.bar.completedhead", "")
+	viper.SetDefault("appearance.status.bar.uncompletedchar", "░")
 	viper.SetDefault("appearance.status.bar.minimumlength", 35)
 	viper.SetDefault("myplaylists.items", "")
 	viper.SetDefault("myplaylists.length", 0)
@@ -94,7 +94,7 @@ func initConfig() {
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			err = viper.WriteConfigAs(home + "/.clspot.json")
+			err = viper.WriteConfigAs(home + "/.spot.json")
 		}
 		cobra.CheckErr(err)
 	}
