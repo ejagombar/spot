@@ -3,51 +3,39 @@
 ### A minimal commmand line tool for spotify written in Go
 Compatible with Linux, Windows. and MacOS
 
-## Commands
-`play`- 
+---
 
-`pause` -
+# Commands
+`play`- Plays the current song
 
-`next` - 
+`pause` - Pauses the current song
 
-`back` - 
+`next` - Skips to the next song
 
-`shuffle` - 
+`back` - Skips back to the previous song
 
-`song` - 
+`shuffle` - Enable/Disable shuffle
 
-`album` - 
+`song` - Play a specified song
 
-`artist` -
+`album` - Play a specified album
 
-`playlist` - 
+`artist` - Play a specified artist
 
-`info` - 
+`playlist` - Play a specified playlist
 
-`add` - Add the current song to a playlist
+`info` - Show info about the current song, or info about your spotify account
 
-`login` - 
+`add` - Add the current song to a specified playlist
 
-`config` - 
+`login` - Login to spot with your spotify account
 
-`help` - 
+`config` - Configure settings
 
-
-
-
+`help` - Show help for any command
 
 
+# Installation
 
 
-
-
-
-
-
-### Control Commands
-- skip
-- play
-- pause
-- next
-- prev
-
+# Help
