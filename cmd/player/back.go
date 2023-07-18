@@ -12,6 +12,7 @@ var BackCmd = &cobra.Command{
 	Use:        "back",
 	Short:      "Skip back to the previous song",
 	Long:       ``,
+	Aliases:    []string{"b"},
 	SuggestFor: []string{"prev", "previous"},
 	Run:        back,
 }

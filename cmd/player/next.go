@@ -12,6 +12,7 @@ var NextCmd = &cobra.Command{
 	Use:        "next",
 	Short:      "Play the next song",
 	Long:       ``,
+	Aliases:    []string{"n"},
 	SuggestFor: []string{"skip", "forward"},
 	Run:        next,
 }
