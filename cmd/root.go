@@ -3,12 +3,12 @@ package cmd
 import (
 	"os"
 
-	"github.com/ejagombar/CLSpotify/cmd/add"
-	"github.com/ejagombar/CLSpotify/cmd/config"
-	"github.com/ejagombar/CLSpotify/cmd/findmusic"
-	"github.com/ejagombar/CLSpotify/cmd/info"
-	"github.com/ejagombar/CLSpotify/cmd/login"
-	"github.com/ejagombar/CLSpotify/cmd/player"
+	"github.com/ejagombar/spot/cmd/add"
+	"github.com/ejagombar/spot/cmd/config"
+	"github.com/ejagombar/spot/cmd/findmusic"
+	"github.com/ejagombar/spot/cmd/info"
+	"github.com/ejagombar/spot/cmd/login"
+	"github.com/ejagombar/spot/cmd/player"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

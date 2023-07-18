@@ -1,6 +1,6 @@
 package main
 
-import "github.com/ejagombar/CLSpotify/cmd"
+import "github.com/ejagombar/spot/cmd"
 
 func main() {
 	cmd.Execute()

@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"errors"
-	"github.com/ejagombar/CLSpotify/authstore"
-	"github.com/ejagombar/CLSpotify/common"
-	"github.com/ejagombar/CLSpotify/playlist"
-	"github.com/ejagombar/CLSpotify/prechecks"
+	"github.com/ejagombar/spot/authstore"
+	"github.com/ejagombar/spot/common"
+	"github.com/ejagombar/spot/playlist"
+	"github.com/ejagombar/spot/prechecks"
 	"github.com/spf13/cobra"
 	"github.com/zmb3/spotify/v2"
 )

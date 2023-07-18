@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/ejagombar/CLSpotify/authstore"
+	"github.com/ejagombar/spot/authstore"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/zmb3/spotify/v2"

@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ejagombar/CLSpotify/authstore"
-	"github.com/ejagombar/CLSpotify/prechecks"
+	"github.com/ejagombar/spot/authstore"
+	"github.com/ejagombar/spot/prechecks"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
