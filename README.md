@@ -34,6 +34,11 @@ https://github.com/ejagombar/spot/assets/77460324/17f6dbc7-3f31-4717-9aaf-28d5a5
 
 `help` - Show help for any command
 
+# Features
+- Fully self hosted - spot requires that you set up your own api account (takes ~5 mins, see setup section). This means you have complete control over your account.
+- Disable colour output by setting the `NO_COLOR` environment variable
+- Configurable design - The config file allows customisation of the progress bar, among other features
+- Minimal output where possible - keep your terminal tidy. 
 
 # Installation
 ### Method 1 - Install from binary
@@ -48,7 +53,7 @@ Prerequisites: Go must be properly installed on your system
 - In the spot directory, download the dependancies: `go mod download`
 - Build and install spot `go install spot`
 
-# Help
+# Setup
 
 **Step 1:** Go to https://developer.spotify.com/ and login with your spotify account.
 
