@@ -44,5 +44,17 @@ func GetClient() (client *spotify.Client, err error) {
 	ctx := context.Background()
 	client = spotify.New(auth.Client(ctx, token))
 
+	newToken, _ := client.Token()
+	SaveToken(newToken)
+
 	return client, nil
+}
+
+// Saves the token to the config file
+func SaveToken(tok *oauth2.Token) error {
+	viper.Set("token.access", tok.AccessToken)
+	viper.Set("token.refresh", tok.RefreshToken)
+	viper.Set("token.timeout", tok.Expiry.Format(time.RFC1123Z))
+	viper.WriteConfig()
+	return nil
 }
