@@ -1,9 +1,9 @@
 ![spotLogo](https://github.com/ejagombar/spot/assets/77460324/29c96587-abd3-4ac1-a0b9-8e2ad6a5ffb9)
 
-### A minimal commmand line tool for spotify written in Go
-Compatible with Linux, Windows. and MacOS
+### A minimal commmand line tool for spotify, written in Go
+Compatible with Linux, Windows, and MacOS
 
----
+https://github.com/ejagombar/spot/assets/77460324/17f6dbc7-3f31-4717-9aaf-28d5a572b5d4
 
 # Commands
 `play`- Plays the current song
