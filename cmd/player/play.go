@@ -2,6 +2,7 @@ package player
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/ejagombar/CLSpotify/authstore"
 	"github.com/ejagombar/CLSpotify/common"
@@ -27,13 +28,11 @@ func play(cmd *cobra.Command, args []string) {
 	deviceID, err := common.SelectDevice(client)
 	cobra.CheckErr(err)
 
-	// if len(args) > 0 {
-	// 	err = SearchSongAndPlay(client, deviceID, common.ConcatArgs(args))
-	// } else {
+	if len(args) > 0 {
+		fmt.Println("Arguements not accepted. \nUse the 'song' command to play a track")
+	}
 	opts := spotify.PlayOptions{DeviceID: &deviceID}
 	client.PlayOpt(context.Background(), &opts)
-	// }
-	// cobra.CheckErr(err)
 }
 
 func init() {

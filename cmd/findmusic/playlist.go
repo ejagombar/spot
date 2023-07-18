@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/ejagombar/CLSpotify/authstore"
 	"github.com/ejagombar/CLSpotify/common"
+	"github.com/ejagombar/CLSpotify/playlist"
 	"github.com/ejagombar/CLSpotify/prechecks"
 	"github.com/spf13/cobra"
 	"github.com/zmb3/spotify/v2"
@@ -35,15 +36,16 @@ var PlaylistCmd = &cobra.Command{
 }
 
 func searchPlaylistAndPlay(client *spotify.Client, deviceID spotify.ID, playlistName string) (err error) {
-	err = common.SaveUserPlaylists(client, deviceID, playlistName)
+	err = playlist.SaveUserPlaylists(client, deviceID, playlistName)
 	if err != nil {
 		return fmt.Errorf("Error while retreiving playlist: %w", err)
 	}
 
-	bestmatch, err := common.SearchForPlaylist(playlistName)
+	bestmatch, err := playlist.SearchForPlaylist(playlistName)
 	if err != nil {
 		return fmt.Errorf("Error while searching for playlist: %w", err)
 	}
+	fmt.Println("Playing from playlist '" + bestmatch.Name + "'")
 	opts := spotify.PlayOptions{DeviceID: &deviceID, PlaybackContext: &bestmatch.URI}
 	err = client.PlayOpt(context.Background(), &opts)
 
