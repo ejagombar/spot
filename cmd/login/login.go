@@ -3,16 +3,17 @@ package login
 import (
 	"context"
 	_ "embed"
+	"errors"
 	"fmt"
+	"log"
+	"net/http"
+	"strings"
+
+	"github.com/ejagombar/CLSpotify/authstore"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/zmb3/spotify/v2"
 	"github.com/zmb3/spotify/v2/auth"
-	"golang.org/x/oauth2"
-	"log"
-	"net/http"
-	"strings"
-	"time"
 )
 
 // redirectURI is the OAuth redirect URI for the application.
@@ -34,16 +35,43 @@ var (
 		Long: `Login with your spotify account
 
 This step must be done before the CLI program can be used.
-Before this command is run, please ensure that the SPOTIFY_CLIENT and SPOTIY_ID fields have been set in the configuration file.
+Before this command is run, please ensure that the SPOTIFY_CLIENT and SPOTIY_ID fields have been set in the configuration file:
 
-A link will be generated that takes you to a webpage where you can login with your spotify account and allow the tool certian permissions with your account.
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Step 1: Go to https://developer.spotify.com/ and login with your spotify account.
+
+Step 2: Go to your dashboard (https://developer.spotify.com/dashboard) and click on the "create an app" button.
+
+Step 3: Enter an app name and description of your choice. (Anything will do)
+
+Step 4: Set the Redirect URL to: http://localhost:8080/callback
+
+Step 5: Click 'create'
+
+Step 6: You will now be greeted with an overview page. At the top right, click "settings"
+
+Step 7: You will see a your client ID and below, a button to reveal your client secret.
+
+Step 8: Copy these values into the spot config file. This hidden file should be found in your home directory with the name .spot.json
+    Open the file and enter the client ID and client secret in the appropriate boxes then save and close the file.
+
+Step 9: run the command "spot login". If everything is done correctly, a link will be generated which you can click to login with your spotify account.
+    If you need any further help, visit the README or open an issue on the github page: https://github.com/ejagombar/spot 
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Once the variables are set and this commnd is run, a link will be generated that takes you to a webpage where you can login with your spotify account and allow the tool certian permissions with your account.
 The permissions requested are all neccessary in order for the tool to function correctly.`,
 		RunE: runAuth,
 	}
 )
 
 func runAuth(cmd *cobra.Command, args []string) error {
-	createAuthRequest()
+	err := createAuthRequest()
+	if err != nil {
+		return fmt.Errorf("%w Run 'spot login --help' for instuctions", err)
+	}
 	client := getClient()
 
 	user, err := client.CurrentUser(context.Background())
@@ -57,7 +85,7 @@ func runAuth(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		fmt.Println(err)
 	}
-	saveToken(tok)
+	authstore.SaveToken(tok)
 
 	return nil
 }
@@ -107,6 +135,10 @@ func createAuthRequest() error {
 	spotify_id := viper.GetString("auth.client_id")
 	spotify_client := viper.GetString("auth.client_secret")
 
+	if spotify_client == "" || spotify_id == "" {
+		return errors.New("CLIENT_ID or CLIENT_SECRET not found.")
+	}
+
 	auth = spotifyauth.New(spotifyauth.WithRedirectURL(redirectURI),
 		spotifyauth.WithClientID(spotify_id),
 		spotifyauth.WithClientSecret(spotify_client),
@@ -121,15 +153,6 @@ func createAuthRequest() error {
 			spotifyauth.ScopePlaylistModifyPublic,
 			spotifyauth.ScopeUserReadCurrentlyPlaying))
 
-	return nil
-}
-
-// Saves the token to the config file
-func saveToken(tok *oauth2.Token) error {
-	viper.Set("token.access", tok.AccessToken)
-	viper.Set("token.refresh", tok.RefreshToken)
-	viper.Set("token.timeout", tok.Expiry.Format(time.RFC1123Z))
-	viper.WriteConfig()
 	return nil
 }
 
