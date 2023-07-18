@@ -28,6 +28,7 @@ Configure the default device using the 'config' command`,
 
 func album(cmd *cobra.Command, args []string) {
 	client, err := authstore.GetClient()
+	cobra.CheckErr(err)
 	prechecks.DeviceAvailable(client)
 
 	deviceID, err := common.SelectDevice(client)

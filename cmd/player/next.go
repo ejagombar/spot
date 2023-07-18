@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// NextCmd represents the next command
+// skip  NextCmd represents the next command
 var NextCmd = &cobra.Command{
 	Use:        "next",
 	Short:      "Play the next song",
@@ -18,8 +18,8 @@ var NextCmd = &cobra.Command{
 
 func next(cmd *cobra.Command, args []string) {
 	client, err := authstore.GetClient()
-	prechecks.DeviceAvailable(client)
 	cobra.CheckErr(err)
+	prechecks.DeviceAvailable(client)
 	client.Next(context.Background())
 }
 

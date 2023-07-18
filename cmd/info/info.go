@@ -40,8 +40,8 @@ var (
 
 func info(cmd *cobra.Command, args []string) {
 	client, err := authstore.GetClient()
-	prechecks.DeviceAvailable(client)
 	cobra.CheckErr(err)
+	prechecks.DeviceAvailable(client)
 
 	if showAccount {
 		accountInfo(client)

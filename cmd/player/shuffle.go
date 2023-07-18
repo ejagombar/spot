@@ -19,8 +19,8 @@ var ShuffleCmd = &cobra.Command{
 
 func shuffle(cmd *cobra.Command, args []string) {
 	client, err := authstore.GetClient()
-	prechecks.DeviceAvailable(client)
 	cobra.CheckErr(err)
+	prechecks.DeviceAvailable(client)
 	value := true
 	if len(args) > 0 {
 		if args[0] == "false" || args[0] == "f" {

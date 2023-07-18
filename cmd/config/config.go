@@ -26,6 +26,7 @@ This file can be found by default in the home directory. It can also be created 
 
 func config(cmd *cobra.Command, args []string) {
 	client, err := authstore.GetClient()
+	cobra.CheckErr(err)
 	if defaultDevice {
 		prechecks.DeviceAvailable(client)
 		cobra.CheckErr(err)

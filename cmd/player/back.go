@@ -18,8 +18,8 @@ var BackCmd = &cobra.Command{
 
 func back(cmd *cobra.Command, args []string) {
 	client, err := authstore.GetClient()
-	prechecks.DeviceAvailable(client)
 	cobra.CheckErr(err)
+	prechecks.DeviceAvailable(client)
 	client.Previous(context.Background())
 }
 

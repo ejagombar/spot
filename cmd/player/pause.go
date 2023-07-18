@@ -13,12 +13,14 @@ var PauseCmd = &cobra.Command{
 	Short: "Pauses the current song",
 	Long: `Use this command to pause the current song playing
     If no song is playing, the command will not do anything.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		client, err := authstore.GetClient()
-		prechecks.DeviceAvailable(client)
-		cobra.CheckErr(err)
-		client.Pause(context.Background())
-	},
+	Run: pause,
+}
+
+func pause(cmd *cobra.Command, args []string) {
+	client, err := authstore.GetClient()
+	cobra.CheckErr(err)
+	prechecks.DeviceAvailable(client)
+	client.Pause(context.Background())
 }
 
 func init() {

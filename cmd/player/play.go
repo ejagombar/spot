@@ -22,8 +22,8 @@ var PlayCmd = &cobra.Command{
 
 func play(cmd *cobra.Command, args []string) {
 	client, err := authstore.GetClient()
-	prechecks.DeviceAvailable(client)
 	cobra.CheckErr(err)
+	prechecks.DeviceAvailable(client)
 
 	deviceID, err := common.SelectDevice(client)
 	cobra.CheckErr(err)

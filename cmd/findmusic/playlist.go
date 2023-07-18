@@ -34,8 +34,8 @@ If a playlist is renamed, the list will not be updated.`,
 
 func playlist(cmd *cobra.Command, args []string) {
 	client, err := authstore.GetClient()
-	prechecks.DeviceAvailable(client)
 	cobra.CheckErr(err)
+	prechecks.DeviceAvailable(client)
 
 	deviceID, err := common.SelectDevice(client)
 	cobra.CheckErr(err)
