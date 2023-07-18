@@ -13,12 +13,14 @@ var BackCmd = &cobra.Command{
 	Short:      "Skip back to the previous song",
 	Long:       ``,
 	SuggestFor: []string{"prev", "previous"},
-	Run: func(cmd *cobra.Command, args []string) {
-		client, err := authstore.GetClient()
-		prechecks.DeviceAvailable(client)
-		cobra.CheckErr(err)
-		client.Previous(context.Background())
-	},
+	Run:        back,
+}
+
+func back(cmd *cobra.Command, args []string) {
+	client, err := authstore.GetClient()
+	prechecks.DeviceAvailable(client)
+	cobra.CheckErr(err)
+	client.Previous(context.Background())
 }
 
 func init() {
