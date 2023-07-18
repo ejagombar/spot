@@ -60,7 +60,12 @@ func SearchSongAndPlay(client *spotify.Client, deviceid spotify.ID, songname str
 	if err != nil {
 		return fmt.Errorf("Error while attempting to play: %w", err)
 	} else {
-		fmt.Println("Playing song " + track.Name + " by " + track.Artists[0].Name)
+		if queueSong {
+			fmt.Println("Queued song " + track.Name + " by " + track.Artists[0].Name)
+		} else {
+			fmt.Println("Playing song " + track.Name + " by " + track.Artists[0].Name)
+		}
+
 	}
 	return nil
 }
