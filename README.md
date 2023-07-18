@@ -1,4 +1,4 @@
-![spotLogo](https://github.com/ejagombar/spot/assets/77460324/f9f4df62-309b-45f6-ac3d-98fe97800db0)
+![spotLogo](https://github.com/ejagombar/spot/assets/77460324/29c96587-abd3-4ac1-a0b9-8e2ad6a5ffb9)
 
 ### A minimal commmand line tool for spotify written in Go
 Compatible with Linux, Windows. and MacOS
