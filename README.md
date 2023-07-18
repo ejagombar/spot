@@ -49,3 +49,23 @@ Prerequisites: Go must be properly installed on your system
 - Build and install spot `go install spot`
 
 # Help
+
+**Step 1:** Go to https://developer.spotify.com/ and login with your spotify account.
+
+**Step 2:** Go to your dashboard (https://developer.spotify.com/dashboard) and click on the "create an app" button.
+
+**Step 3:** Enter an app name and description of your choice. (Anything will do)
+
+**Step 4:** Set the Redirect URL to: http://localhost:8080/callback
+
+**Step 5:** Click 'create'
+
+**Step 6:** You will now be greeted with an overview page. At the top right, click "settings"
+
+**Step 7:** You will see a your client ID and below, a button to reveal your client secret.
+
+**Step 8:** Copy these values into the spot config file. This hidden file should be found in your home directory with the name .spot.json
+    Open the file and enter the client ID and client secret in the appropriate boxes then save and close the file.
+
+**Step 9:** run the command "spot login". If everything is done correctly, a link will be generated which you can click to login with your spotify account.
+
