@@ -10,14 +10,17 @@ import (
 	"github.com/spf13/viper"
 )
 
-// albumCmd represents the album command
+// ConfigCmd represents the config command
 var (
 	defaultDevice bool
 	ConfigCmd     = &cobra.Command{
 		Use:   "config",
 		Short: "Configure defaults and settings",
-		Long:  ``,
-		Run:   config,
+		Long: `Configure some defualts and settings.
+        
+For security reasons and ease of use, most configuration settings are only editable through the .spot.json config file.
+This file can be found by default in the home directory. It can also be created in the spot installation directory.`,
+		Run: config,
 	}
 )
 
@@ -43,6 +46,5 @@ func config(cmd *cobra.Command, args []string) {
 }
 
 func init() {
-	ConfigCmd.Flags().BoolVar(&defaultDevice, "SetDefaultDevice", false, "Sets the spotify device currently playing as the default")
-	// ConfigCmd.Flags().String("NameDevice","",")
+	ConfigCmd.Flags().BoolVar(&defaultDevice, "SetDefaultDevice", false, "Sets the spotify device that is currently active as the default when playing music")
 }

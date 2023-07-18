@@ -1,6 +1,3 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package info
 
 import (
@@ -53,6 +50,9 @@ func info(cmd *cobra.Command, args []string) {
 	}
 }
 
+// Display info about the account connected with the spotify client passed into the function.
+// No errors will be returned as they will be displayed on the screen if present
+// Colour can be disabled by setting the NO_COLOR environement variable.
 func accountInfo(client *spotify.Client) {
 	user, err := client.CurrentUser(context.Background())
 	cobra.CheckErr(err)
@@ -81,6 +81,8 @@ func accountInfo(client *spotify.Client) {
 	fmt.Println("")
 }
 
+// Display additional info about the currrently playing song.
+// The info consists of muscial analysis data provided by spotify.
 func moreSongInfo(client *spotify.Client) {
 	track, err := client.PlayerState(context.Background())
 	cobra.CheckErr(err)
@@ -135,6 +137,8 @@ func moreSongInfo(client *spotify.Client) {
 	fmt.Println("")
 }
 
+// Display basic information about the current playing song.
+// This info includes the song name, artist, album, song length and current progress through the track.
 func songInfo(client *spotify.Client) {
 	status, err := client.PlayerCurrentlyPlaying(context.Background())
 	cobra.CheckErr(err)
@@ -198,6 +202,8 @@ func songInfo(client *spotify.Client) {
 	color.Unset()
 }
 
+// Takes a styleconfig struct used to define the appearance of a progress bar.
+// The struct is loaded with data taken from the configuration file.
 func loadStyle(style *styleConfig) (err error) {
 	startString := fmt.Sprint(viper.Get("appearance.status.bar.startstring"))
 	endString := fmt.Sprint(viper.Get("appearance.status.bar.endstring"))
@@ -223,6 +229,7 @@ func loadStyle(style *styleConfig) (err error) {
 	return nil
 }
 
+// Find the minimum integer of the values passed into the function
 func findMinInt(values []int) (min int) {
 	min = values[0]
 	for _, v := range values {
@@ -233,6 +240,8 @@ func findMinInt(values []int) (min int) {
 	return min
 }
 
+// Converts seconds into a minute and seconds string.
+// The seconds will always be displayed the number with 2 digits
 func secondsToTimestamp(secondsIn int) string {
 	minutes := secondsIn / 60
 	seconds := secondsIn % 60
@@ -240,6 +249,8 @@ func secondsToTimestamp(secondsIn int) string {
 	return str
 }
 
+// Displays a static, configurable progress bar on the screen.
+// The style of the progress bar can be configured using the styleConfig struct
 func StaticProgressBar(style *styleConfig, progress int, total int) {
 	if progress > total {
 		progress = total
@@ -276,6 +287,6 @@ func StaticProgressBar(style *styleConfig, progress int, total int) {
 }
 
 func init() {
-	InfoCmd.Flags().BoolVar(&showAccount, "account", false, "Displays account instead of song info")
-	InfoCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "Shows additional song information")
+	InfoCmd.Flags().BoolVar(&showAccount, "account", false, "Display account info instead of song info")
+	InfoCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "Show additional song information")
 }
