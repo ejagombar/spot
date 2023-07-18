@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	// "fmt"
 	"os"
 
 	"github.com/ejagombar/CLSpotify/cmd/add"
@@ -18,15 +17,14 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var (
+	client  *spotify.Client
 	rootCmd = &cobra.Command{
-		Use:   "CLSpotify",
+		Use:   "spot",
 		Short: "A brief description of your application",
-		Long:  `CLSpotify is a CLI tool to control your spotify account and playback`,
-		// Uncomment the following line if your bare application
-		// has an action associated with it:
-		// Run: func(cmd *cobra.Command, args []string) { },
+		Long: `spot is a CLI tool to control your spotify account and playback.
+
+To get started run 'spot login --help' and read the instructions to login with your account.`,
 	}
-	client *spotify.Client
 )
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -38,6 +36,7 @@ func Execute() {
 	}
 }
 
+// Add all the subcommands to the root command
 func addSubCommands() {
 	rootCmd.AddCommand(player.PlayCmd)
 	rootCmd.AddCommand(player.PauseCmd)
@@ -45,19 +44,19 @@ func addSubCommands() {
 	rootCmd.AddCommand(player.BackCmd)
 	rootCmd.AddCommand(player.ShuffleCmd)
 
-	rootCmd.AddCommand(add.AddCmd)
-
-	rootCmd.AddCommand(config.ConfigCmd)
-	rootCmd.AddCommand(login.LoginCmd)
-	rootCmd.AddCommand(info.InfoCmd)
-
 	rootCmd.AddCommand(findmusic.SongCmd)
 	rootCmd.AddCommand(findmusic.AlbumCmd)
 	rootCmd.AddCommand(findmusic.ArtistCmd)
 	rootCmd.AddCommand(findmusic.PlaylistCmd)
-}
 
-func preChecks() {}
+	rootCmd.AddCommand(add.AddCmd)
+
+	rootCmd.AddCommand(config.ConfigCmd)
+
+	rootCmd.AddCommand(login.LoginCmd)
+
+	rootCmd.AddCommand(info.InfoCmd)
+}
 
 func init() {
 	initConfig()
@@ -68,10 +67,10 @@ func init() {
 	viper.SetDefault("token.refresh", "")
 	viper.SetDefault("token.timeout", "")
 	viper.SetDefault("config.defaultdeviceid", "")
-	viper.SetDefault("appearance.status.bar.startstring", " [")
-	viper.SetDefault("appearance.status.bar.endstring", "] ")
-	viper.SetDefault("appearance.status.bar.completedchar", "=")
-	viper.SetDefault("appearance.status.bar.completedhead", "")
+	viper.SetDefault("appearance.status.bar.startstring", " │")
+	viper.SetDefault("appearance.status.bar.endstring", "│ ")
+	viper.SetDefault("appearance.status.bar.completedchar", "▒")
+	viper.SetDefault("appearance.status.bar.completedhead", "░")
 	viper.SetDefault("appearance.status.bar.uncompletedchar", " ")
 	viper.SetDefault("appearance.status.bar.minimumlength", 35)
 	viper.SetDefault("myplaylists.items", "")
@@ -86,9 +85,10 @@ func initConfig() {
 	home, err := os.UserHomeDir()
 	cobra.CheckErr(err)
 
-	viper.SetConfigName(".clspot.json")
+	viper.SetConfigName(".spot.json")
 	viper.SetConfigType("json")
 	viper.AddConfigPath(home)
+	viper.AddConfigPath(".")
 
 	viper.AutomaticEnv()
 
