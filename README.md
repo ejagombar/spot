@@ -36,6 +36,16 @@ Compatible with Linux, Windows. and MacOS
 
 
 # Installation
+### Method 1 - Install from binary
+- Visit the releases tab on the left side of the github repository page
+- Download the appropriarate file for your OS
+- Unzip the file.
+- Add the binary to the path.
 
+### Method 2 - Build from source
+Prerequisites: Go must be properly installed on your system
+- Clone the repository: `git clone git@github.com:ejagombar/spot.git`
+- In the spot directory, download the dependancies: `go mod download`
+- Build and install spot `go install spot`
 
 # Help
