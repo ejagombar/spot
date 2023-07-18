@@ -14,7 +14,8 @@ var ShuffleCmd = &cobra.Command{
 	Short: "Switch between shuffle and non-shuffle modes",
 	Long: `This command will shuffle the queued songs by default.
     The shuffle can be disabled by adding "false or "f" after the shuffle argument`,
-	Run: shuffle,
+	Aliases: []string{"s"},
+	Run:     shuffle,
 }
 
 func shuffle(cmd *cobra.Command, args []string) {
